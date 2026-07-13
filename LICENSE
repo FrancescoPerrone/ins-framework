@@ -1,0 +1,52 @@
+INS Source-Available License, Version 1.0
+==========================================
+
+Copyright (c) 2026 Francesco Perrone. All Rights Reserved.
+
+1. DEFINITIONS
+
+   "Software" means the source code, documentation, and all other files
+   contained in this repository or distributed alongside this licence.
+
+   "Use" includes, but is not limited to: copying, reproduction,
+   distribution, modification, adaptation, incorporation into another
+   work, and use in academic publications, presentations, or tools.
+
+2. VIEWING AND STUDYING
+
+   You are permitted to view and study the Software for personal,
+   non-commercial, educational, and evaluation purposes, free of charge,
+   provided that this licence notice and the copyright statement above
+   are retained in all copies.
+
+3. NOTIFICATION REQUIREMENT
+
+   Any Use of the Software beyond the permissions granted in Section 2
+   requires prior written notification to the author:
+
+       Francesco Perrone
+       <francescoperr@gmail.com>
+
+   Notification must clearly describe:
+     (a) the identity and affiliation of the person or organisation;
+     (b) the intended purpose and scope of Use;
+     (c) whether the Software will be modified, and if so, how.
+
+   The author reserves the right to place conditions on, or to decline,
+   any notified Use.
+
+4. ATTRIBUTION
+
+   Any permitted Use must acknowledge the author and this repository.
+   Academic publications must cite the associated paper(s) as specified
+   in the README file.
+
+5. NO WARRANTY
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+   NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+   CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

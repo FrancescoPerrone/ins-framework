@@ -1,0 +1,14 @@
+Acts = [buyH, losH] ;
+Acts = [buyH, doNH] ;
+Acts = [takH, comH] ;
+Acts = [takH, losH] ;
+Acts = [takH, doNH] ;
+Acts = [buyH, losH] ;
+Acts = [buyH, doNH] ;
+Acts = [takH, comH] ;
+Acts = [takH, losH] ;
+Acts = [takH, doNH] ;
+Acts = [takH, losH] ;
+Acts = [takH, doNH] ;
+Acts = [takH, losH] ;
+Acts = [takH, doNH] ;

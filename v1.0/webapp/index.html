@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>INS — Moral Reasoning System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:           #0b0d13;
+      --bg-card:      #10131c;
+      --bg-elevated:  #161a26;
+      --border:       #1c2030;
+      --border-mid:   #252c3f;
+      --text:         #b8b3a8;
+      --text-dim:     #525870;
+      --text-bright:  #e6e0d4;
+      --accent:       #c9a94a;
+      --accent-dim:   rgba(201,169,74,0.15);
+      --accent-glow:  rgba(201,169,74,0.06);
+
+      --hal:   #5b9cf6;
+      --carla: #c084fc;
+
+      --lifeH-bg:     #091e3e;  --lifeH-fg:     #60a5fa;  --lifeH-bdr:    #1a3a7a;
+      --lifeC-bg:     #07231a;  --lifeC-fg:     #34d399;  --lifeC-bdr:    #0e4a30;
+      --freedomH-bg:  #231500;  --freedomH-fg:  #fbbf24;  --freedomH-bdr: #4a2d00;
+      --freedomC-bg:  #220b17;  --freedomC-fg:  #f472b6;  --freedomC-bdr: #581230;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.7;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── Shell ─────────────────────────────────────────────── */
+    .shell-top {
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .shell-content {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    /* ── Header bar ────────────────────────────────────────── */
+    .hdr {
+      display: flex;
+      align-items: center;
+      gap: 2em;
+      padding: 0.9em 2.2em;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+    .hdr::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 50% 180% at 0% 50%, var(--accent-glow), transparent);
+      pointer-events: none;
+    }
+    .hdr-title {
+      font-size: 1.25em;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-bright);
+      white-space: nowrap;
+    }
+    .hdr-title em {
+      font-style: italic;
+      color: var(--accent);
+      font-weight: 400;
+    }
+    .hdr-sub {
+      font-size: 0.72em;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ── Tab bar ───────────────────────────────────────────── */
+    .tabbar {
+      display: flex;
+      align-items: stretch;
+      padding: 0 2.2em;
+      background: var(--bg);
+      gap: 0;
+    }
+    .tab {
+      padding: 0.7em 1.4em;
+      font-size: 0.73em;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .tab:hover:not(.active) { color: var(--text); }
+    .tab.active {
+      color: var(--text-bright);
+      border-bottom-color: var(--accent);
+    }
+
+    /* mode switch lives at the far right of the tab bar */
+    .tabbar-spacer { flex: 1; }
+    .mode-switch {
+      display: flex;
+      align-items: center;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-mid);
+      border-radius: 20px;
+      padding: 3px;
+      gap: 2px;
+      cursor: pointer;
+      user-select: none;
+      align-self: center;
+      margin-bottom: 1px;
+    }
+    .mode-opt {
+      padding: 0.22em 0.85em;
+      border-radius: 16px;
+      font-size: 0.68em;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      transition: color 0.15s, background 0.15s;
+    }
+    .mode-opt.active {
+      background: var(--bg-card);
+      color: var(--text-bright);
+      border: 1px solid var(--border);
+    }
+
+    /* ── Pages ─────────────────────────────────────────────── */
+    .page {
+      display: none;
+      max-width: 1020px;
+      margin: 0 auto;
+      padding: 3em 2.2em 5em;
+    }
+    .page.active { display: block; }
+
+    /* ── Section title ─────────────────────────────────────── */
+    .pg-hdr {
+      display: flex;
+      align-items: baseline;
+      gap: 1em;
+      margin-bottom: 1.8em;
+    }
+    .pg-title {
+      font-size: 1.7em;
+      font-weight: 300;
+      color: var(--text-bright);
+      letter-spacing: 0.04em;
+    }
+    .pg-count {
+      font-size: 0.72em;
+      color: var(--text-dim);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    /* ── Value chips ───────────────────────────────────────── */
+    .val {
+      display: inline-flex;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68em;
+      font-weight: 500;
+      padding: 2px 7px 3px;
+      border-radius: 3px;
+      border: 1px solid;
+      white-space: nowrap;
+      letter-spacing: 0.02em;
+    }
+    .val.lifeH    { background: var(--lifeH-bg);    color: var(--lifeH-fg);    border-color: var(--lifeH-bdr); }
+    .val.lifeC    { background: var(--lifeC-bg);    color: var(--lifeC-fg);    border-color: var(--lifeC-bdr); }
+    .val.freedomH { background: var(--freedomH-bg); color: var(--freedomH-fg); border-color: var(--freedomH-bdr); }
+    .val.freedomC { background: var(--freedomC-bg); color: var(--freedomC-fg); border-color: var(--freedomC-bdr); }
+
+    /* ── Monospace / action sequences ──────────────────────── */
+    .acts {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78em;
+      color: var(--text);
+    }
+    .arr { color: var(--text-dim); padding: 0 0.2em; }
+    .arr-label { color: var(--text-dim); padding: 0 0.5em; font-size: 0.82em; }
+
+    .hal   { color: var(--hal); }
+    .carla { color: var(--carla); }
+
+    /* ── Card ──────────────────────────────────────────────── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .card-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75em 1.2em;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.74em;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    /* ── Grid ──────────────────────────────────────────────── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2em; }
+
+    /* ── Rows ──────────────────────────────────────────────── */
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.55em 1.2em;
+      border-bottom: 1px solid var(--border);
+      gap: 0.7em;
+      transition: background 0.1s;
+    }
+    .row:last-child { border-bottom: none; }
+    .row:hover { background: var(--bg-elevated); }
+
+    /* ── Attacks ───────────────────────────────────────────── */
+    .attack-list { display: flex; flex-direction: column; gap: 0.4em; }
+    .attack-row {
+      display: flex;
+      align-items: center;
+      gap: 0.7em;
+      padding: 0.65em 1em;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      transition: border-color 0.12s;
+    }
+    .attack-row:hover { border-color: var(--border-mid); }
+    .attack-side { flex: 1; display: flex; align-items: center; gap: 0.45em; }
+    .attack-side.right { justify-content: flex-end; }
+    .attack-mid {
+      display: flex;
+      align-items: center;
+      gap: 0.25em;
+      color: #9b2c2c;
+      font-size: 0.78em;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+    .attack-mid .lbl { color: var(--text-dim); }
+
+    /* ── Inner tabs (extensions) ───────────────────────────── */
+    .inner-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.4em;
+    }
+    .inner-tab {
+      padding: 0.6em 1.3em;
+      font-size: 0.74em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.14s, border-color 0.14s;
+      user-select: none;
+    }
+    .inner-tab:hover:not(.active) { color: var(--text); }
+    .inner-tab.active { color: var(--text-bright); border-bottom-color: var(--accent); }
+    .inner-panel { display: none; }
+    .inner-panel.active { display: block; }
+
+    .ext-list { display: flex; flex-direction: column; gap: 0.4em; }
+    .ext-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8em;
+      padding: 0.6em 1em;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+    }
+    .ext-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.66em;
+      color: var(--text-dim);
+      min-width: 1.6em;
+      padding-top: 0.18em;
+    }
+    .ext-args { display: flex; flex-wrap: wrap; gap: 0.6em 1em; align-items: center; }
+    .ext-arg  { display: flex; align-items: center; gap: 0.35em; }
+
+    /* ── VAF ───────────────────────────────────────────────── */
+    .aud-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+    .aud-card-hdr { padding: 1em 1.2em 0.9em; border-bottom: 1px solid var(--border); }
+    .aud-name { font-size: 1em; font-weight: 600; color: var(--text-bright); letter-spacing: 0.04em; }
+    .aud-order { display: flex; align-items: center; gap: 0.3em; flex-wrap: wrap; margin-top: 0.5em; }
+    .ord-sep { color: var(--text-dim); font-size: 0.85em; }
+    .aud-body { padding: 1em 1.2em; }
+    .aud-sub {
+      font-size: 0.68em;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      margin-bottom: 0.4em;
+    }
+    .aud-ext-list { display: flex; flex-direction: column; gap: 0.3em; }
+    .aud-ext-item { display: flex; align-items: center; gap: 0.4em; flex-wrap: wrap; font-size: 0.88em; }
+    .aud-sep { color: var(--text-dim); padding: 0 0.1em; }
+
+    /* ── Dialectical proof ─────────────────────────────────── */
+    .proof-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
+    }
+    .proof-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .proof-summary {
+      display: flex;
+      align-items: center;
+      gap: 0.8em;
+      padding: 0.65em 1.1em;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.1s;
+      list-style: none;
+    }
+    .proof-summary:hover { background: var(--bg-elevated); }
+    .proof-summary::-webkit-details-marker { display: none; }
+    .proof-toggle {
+      font-size: 0.65em;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      margin-left: auto;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+    details[open] .proof-toggle::before { content: '▲ hide'; }
+    details:not([open]) .proof-toggle::before { content: '▼ show proof'; }
+    .proof-body {
+      border-top: 1px solid var(--border);
+      padding: 0.8em 1.1em;
+    }
+    .proof-step {
+      display: flex;
+      align-items: center;
+      gap: 0.8em;
+      padding: 0.35em 0;
+    }
+    .proof-step + .proof-step { border-top: 1px solid var(--border); }
+    .proof-player {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65em;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      min-width: 2.8em;
+    }
+    .proof-player.pro { color: var(--hal); }
+    .proof-player.opp { color: #9b2c2c; }
+    .proof-step-n {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62em;
+      color: var(--text-dim);
+      min-width: 1.2em;
+    }
+
+    /* ── Landing page ──────────────────────────────────────── */
+    .landing-hero {
+      text-align: center;
+      padding: 2.5em 0 3em;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3em;
+      position: relative;
+    }
+    .landing-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 0%, var(--accent-glow), transparent);
+      pointer-events: none;
+    }
+    .landing-title {
+      font-size: 2.8em;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-bright);
+    }
+    .landing-title em { font-style: italic; color: var(--accent); font-weight: 400; }
+    .landing-sub {
+      margin-top: 0.4em;
+      font-size: 0.88em;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+    }
+
+    .landing-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2em;
+      margin-bottom: 3em;
+    }
+
+    .info-block { }
+    .info-block h3 {
+      font-size: 0.7em;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+      margin-bottom: 0.9em;
+    }
+    .info-block p {
+      font-size: 0.95em;
+      color: var(--text);
+      line-height: 1.75;
+    }
+    .info-block p + p { margin-top: 0.7em; }
+    .info-block em { font-style: italic; color: var(--text-bright); }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8em;
+    }
+    .stat-cell {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 1em 1.2em;
+    }
+    .stat-num {
+      font-size: 1.9em;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .stat-label {
+      font-size: 0.72em;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-dim);
+      margin-top: 0.35em;
+    }
+
+    .refs-block {
+      border-top: 1px solid var(--border);
+      padding-top: 2em;
+    }
+    .refs-block h3 {
+      font-size: 0.7em;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+      margin-bottom: 1em;
+    }
+    .ref-list { list-style: none; display: flex; flex-direction: column; gap: 0.55em; }
+    .ref-list li {
+      font-size: 0.88em;
+      color: var(--text);
+      line-height: 1.5;
+      padding-left: 1.2em;
+      position: relative;
+    }
+    .ref-list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--text-dim);
+    }
+    .ref-list em { font-style: italic; color: var(--text-dim); }
+
+    /* ── Misc ──────────────────────────────────────────────── */
+    .empty   { color: var(--text-dim); }
+    .err     { color: #e05555; }
+    .loading { color: var(--text-dim); padding: 0.5em 0; }
+    .mb-1 { margin-bottom: 1em; }
+    .mt-1 { margin-top: 1em; }
+
+    @media (max-width: 680px) {
+      .grid-2, .landing-body, .stats-grid { grid-template-columns: 1fr; }
+      .landing-title { font-size: 1.9em; }
+      .hdr-sub { display: none; }
+      .attack-row { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="shell-top">
+  <!-- Header bar -->
+  <div class="hdr">
+    <div>
+      <div class="hdr-title"><em>INS</em> — Moral Reasoning System</div>
+      <div class="hdr-sub">AATS · VAF · Dung (1995) · CDM (2003)</div>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <nav class="tabbar">
+    <div class="tab active" data-page="pg-overview">Overview</div>
+    <div class="tab" data-page="pg-args">Arguments</div>
+    <div class="tab" data-page="pg-attacks">Attacks</div>
+    <div class="tab" data-page="pg-extensions">Extensions</div>
+    <div class="tab" data-page="pg-vaf">VAF</div>
+    <div class="tab" data-page="pg-proofs">Dialectical Proofs</div>
+    <div class="tabbar-spacer"></div>
+    <div class="mode-switch" id="mode-switch">
+      <span class="mode-opt active" data-mode="code">Code</span>
+      <span class="mode-opt" data-mode="english">Plain English</span>
+    </div>
+  </nav>
+</div>
+
+<div class="shell-content">
+
+  <!-- ── Overview ── -->
+  <div class="page active" id="pg-overview">
+    <div class="landing-hero">
+      <h1 class="landing-title"><em>INS</em> — Moral Reasoning System</h1>
+      <p class="landing-sub">Action-Based Alternating Transition System · Value-Based Argumentation Framework</p>
+    </div>
+
+    <div class="landing-body">
+      <div class="info-block">
+        <h3>The scenario</h3>
+        <p>Agent <em>Hal</em> must decide whether and how to help <em>Carla</em>, a diabetic who
+        needs insulin to survive. The tension between Hal's autonomy and Carla's need for help
+        is expressed as a conflict of values: life vs. freedom, self vs. other.</p>
+        <p>The system models this dilemma as an AATS: states, actions, value evaluations,
+        and structured arguments are all represented in Prolog. Arguments are evaluated under
+        Dung (1995) abstract argumentation semantics and under the Value-Based Argumentation
+        Framework of Bench-Capon (2003), where different audience orderings over values
+        produce different preferred extensions.</p>
+      </div>
+
+      <div class="info-block">
+        <h3>Key results</h3>
+        <div class="stats-grid">
+          <div class="stat-cell">
+            <div class="stat-num">35</div>
+            <div class="stat-label">Arguments (AS1 + AS2)</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-num">13</div>
+            <div class="stat-label">Dung preferred extensions</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-num">35/35</div>
+            <div class="stat-label">Credulously accepted</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-num">0/35</div>
+            <div class="stat-label">Sceptically accepted</div>
+          </div>
+        </div>
+        <p class="mt-1" style="font-size:0.88em; color:var(--text-dim);">
+          Every argument can be defended; none is unassailable. The framework is maximally
+          contentious — consistent with the empty grounded extension.
+        </p>
+      </div>
+    </div>
+
+    <div class="refs-block">
+      <h3>References</h3>
+      <ul class="ref-list">
+        <li>Atkinson, K. &amp; Bench-Capon, T. (2006). Addressing moral problems through practical reasoning.
+          <em>Deontic Logic and Artificial Normative Systems</em>, pp. 8–23.</li>
+        <li>Bench-Capon, T. (2003). Persuasion in practical argument using value-based argumentation frameworks.
+          <em>Journal of Logic and Computation</em>, 13(3), 429–448.</li>
+        <li>Cayrol, C., Doutre, S. &amp; Mengin, J. (2003). On decision problems related to the preferred semantics
+          for argumentation frameworks. <em>Journal of Logic and Computation</em>, 13(3), 377–402.</li>
+        <li>Caminada, M. (2006). On the issue of reinstatement in argumentation.
+          <em>JELIA 2006</em>, LNCS 4160, pp. 111–123.</li>
+        <li>Dung, P.M. (1995). On the acceptability of arguments and its fundamental role in nonmonotonic
+          reasoning, logic programming and n-person games. <em>Artificial Intelligence</em>, 77(2), 321–357.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── Arguments ── -->
+  <div class="page" id="pg-args">
+    <div class="pg-hdr">
+      <h2 class="pg-title" data-code="Arguments" data-english="What Each Agent Proposes">Arguments</h2>
+      <span class="pg-count" id="args-count"></span>
+    </div>
+    <div id="args-body" class="loading">Loading…</div>
+  </div>
+
+  <!-- ── Attacks ── -->
+  <div class="page" id="pg-attacks">
+    <div class="pg-hdr">
+      <h2 class="pg-title" data-code="Attack Relation" data-english="Conflicting Proposals">Attack Relation</h2>
+      <span class="pg-count" id="attacks-count"></span>
+    </div>
+    <div id="attacks-body" class="loading">Loading…</div>
+  </div>
+
+  <!-- ── Extensions ── -->
+  <div class="page" id="pg-extensions">
+    <div class="pg-hdr">
+      <h2 class="pg-title" data-code="Dung Extensions" data-english="Accepted Sets">Dung Extensions</h2>
+    </div>
+    <div id="extensions-body" class="loading">Loading…</div>
+  </div>
+
+  <!-- ── VAF ── -->
+  <div class="page" id="pg-vaf">
+    <div class="pg-hdr">
+      <h2 class="pg-title" data-code="VAF by Audience" data-english="What Each Audience Endorses">VAF by Audience</h2>
+    </div>
+    <div id="vaf-body" class="loading">Loading…</div>
+  </div>
+
+  <!-- ── Dialectical Proofs ── -->
+  <div class="page" id="pg-proofs">
+    <div class="pg-hdr">
+      <h2 class="pg-title" data-code="Dialectical Proofs" data-english="How Each Position Defends Itself">Dialectical Proofs</h2>
+      <span class="pg-count" id="proofs-count"></span>
+    </div>
+    <p class="mb-1" style="font-size:0.9em; color:var(--text-dim); max-width:60ch;">
+      Each argument's φ₁-proof (Cayrol, Doutre &amp; Mengin 2003): a dialogue in which
+      PRO defends the argument against all OPP challenges. Expand a row to see the moves.
+    </p>
+    <div id="proofs-body" class="loading">Loading…</div>
+  </div>
+
+</div><!-- shell-content -->
+
+<script>
+/* ── State ───────────────────────────────────────────────── */
+let MODE = 'code';
+const DATA = { args: null, attacks: null, extensions: null, vaf: null, proofs: null };
+
+/* ── Translation ─────────────────────────────────────────── */
+const VALUE_LABELS = {
+  lifeH:    "Hal's Life",
+  lifeC:    "Carla's Life",
+  freedomH: "Hal's Freedom",
+  freedomC: "Carla's Freedom",
+};
+const ACTION_LABELS = {
+  buyH: 'Buy insulin', comH: 'Compensate Carla', takH: 'Take insulin',
+  losH: 'Lose insulin', doNH: 'Do nothing',
+  buyC: 'Buy insulin', comC: 'Compensate Hal',  takC: 'Take insulin',
+  losC: 'Lose insulin', doNC: 'Do nothing',
+};
+
+function tv(v)  { return MODE === 'english' && VALUE_LABELS[v]  ? VALUE_LABELS[v]  : v; }
+function ta(a)  {
+  if (MODE !== 'english') return a;
+  if (typeof a === 'string' && a.includes('-'))
+    return a.split('-').map(p => ACTION_LABELS[p] || p).join(' · ');
+  return ACTION_LABELS[a] || a;
+}
+function taud(n) {
+  if (MODE !== 'english') return n;
+  return n.split('_').map(w => w[0].toUpperCase() + w.slice(1)).join(' ');
+}
+
+/* ── Helpers ─────────────────────────────────────────────── */
+function chip(v)  { return `<span class="val ${v}">${tv(v)}</span>`; }
+function acts(a)  {
+  const aa = Array.isArray(a.actions) ? a.actions : [String(a.actions)];
+  return aa.map(ta).join(', ');
+}
+function arrow(scheme) {
+  if (MODE !== 'english') return '<span class="arr">→</span>';
+  return `<span class="arr-label">${scheme === 'as2' ? 'protects' : 'promotes'}</span>`;
+}
+function argInline(a) {
+  return `<span class="acts">${acts(a)}</span>${arrow(a.scheme)}${chip(a.value)}`;
+}
+function fmtExt(ext) {
+  if (!ext || ext.length === 0) return '<span class="empty">∅</span>';
+  return ext.map(a => `<div class="ext-arg">${argInline(a)}</div>`).join('');
+}
+function get(url) {
+  return fetch(url).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+}
+function showErr(id, msg) {
+  document.getElementById(id).innerHTML = `<span class="err">Error: ${msg}</span>`;
+}
+
+/* ── Static label swap ───────────────────────────────────── */
+function applyLabels() {
+  document.querySelectorAll('[data-code]').forEach(el => {
+    el.textContent = MODE === 'english' ? el.dataset.english : el.dataset.code;
+  });
+}
+
+/* ── Arguments ───────────────────────────────────────────── */
+function renderArgs() {
+  const args  = DATA.args;
+  const hal   = args.filter(a => a.agent === 'hal');
+  const carla = args.filter(a => a.agent === 'carla');
+  document.getElementById('args-count').textContent =
+    `${args.length} total · ${hal.length} Hal · ${carla.length} Carla`;
+
+  function panel(list, ag, label) {
+    const rows = list.map(a =>
+      `<div class="row">
+         <span class="acts">${acts(a)}</span>
+         ${arrow(a.scheme)}${chip(a.value)}
+       </div>`
+    ).join('');
+    return `<div class="card">
+      <div class="card-hdr">
+        <span class="${ag}">${label}</span>
+        <span class="pg-count">${list.length}</span>
+      </div>
+      ${rows || '<div class="row empty">No arguments</div>'}
+    </div>`;
+  }
+  const halL   = MODE === 'english' ? 'Hal (acts on his own)' : 'Hal — individual';
+  const carlaL = MODE === 'english' ? 'Carla (acts with Hal)' : 'Carla — joint';
+  document.getElementById('args-body').innerHTML =
+    `<div class="grid-2">${panel(hal,'hal',halL)}${panel(carla,'carla',carlaL)}</div>`;
+}
+
+/* ── Attacks ─────────────────────────────────────────────── */
+function renderAttacks() {
+  const data = DATA.attacks;
+  document.getElementById('attacks-count').textContent = `${data.length} pairs`;
+  const atLbl = MODE === 'english' ? 'challenges' : 'attacks';
+  const rows = data.map(a =>
+    `<div class="attack-row">
+       <div class="attack-side">
+         <span class="acts">${acts(a.attacker)}</span>${arrow()}${chip(a.attacker.value)}
+       </div>
+       <div class="attack-mid"><span>⟶</span><span class="lbl">${atLbl}</span><span>⟶</span></div>
+       <div class="attack-side right">
+         ${chip(a.attacked.value)}<span class="arr">←</span>
+         <span class="acts">${acts(a.attacked)}</span>
+       </div>
+     </div>`
+  ).join('');
+  document.getElementById('attacks-body').innerHTML =
+    `<div class="attack-list">${rows || '<span class="empty">No attacks</span>'}</div>`;
+}
+
+/* ── Extensions ──────────────────────────────────────────── */
+function renderExtensions() {
+  const data = DATA.extensions;
+  const active = document.querySelector('#extensions-body .inner-panel.active')?.id || 'ep-grounded';
+  const tG = MODE === 'english' ? 'Core Consensus'        : 'Grounded';
+  const tP = MODE === 'english' ? 'Maximal Accepted Sets' : 'Preferred';
+  const tS = MODE === 'english' ? 'Fully Consistent Sets' : 'Stable';
+
+  function extList(exts) {
+    if (exts.length === 0) return '<span class="empty">none</span>';
+    return '<div class="ext-list">' + exts.map((e,i) =>
+      `<div class="ext-item">
+         <span class="ext-num">${i+1}.</span>
+         <div class="ext-args">${fmtExt(e)}</div>
+       </div>`
+    ).join('') + '</div>';
+  }
+  document.getElementById('extensions-body').innerHTML =
+    `<div class="inner-tabs">
+       <div class="inner-tab" data-panel="ep-grounded">${tG}</div>
+       <div class="inner-tab" data-panel="ep-preferred">${tP} (${data.preferred.length})</div>
+       <div class="inner-tab" data-panel="ep-stable">${tS} (${data.stable.length})</div>
+     </div>
+     <div id="ep-grounded"  class="inner-panel">
+       <div class="ext-list"><div class="ext-item">
+         <div class="ext-args">${fmtExt(data.grounded)}</div>
+       </div></div>
+     </div>
+     <div id="ep-preferred" class="inner-panel">${extList(data.preferred)}</div>
+     <div id="ep-stable"    class="inner-panel">${extList(data.stable)}</div>`;
+
+  const restoreTab   = document.querySelector(`[data-panel="${active}"]`) || document.querySelector('[data-panel="ep-grounded"]');
+  const restorePanel = document.getElementById(active) || document.getElementById('ep-grounded');
+  restoreTab.classList.add('active');
+  restorePanel.classList.add('active');
+}
+
+/* ── VAF ─────────────────────────────────────────────────── */
+function renderVAF() {
+  const results = DATA.vaf;
+  const gndLbl  = MODE === 'english' ? 'Core Consensus'        : 'Grounded';
+  const prefLbl = MODE === 'english' ? 'Maximal Accepted Sets' : 'Preferred';
+
+  const cards = results.map(([pref, gnd]) => {
+    const orderHtml = pref.order.map(chip).join('<span class="ord-sep">›</span>');
+    const gndHtml   = `<div class="aud-ext-item">${fmtExt(gnd.grounded)}</div>`;
+    const prefHtml  = pref.preferred.length === 0
+      ? '<div class="aud-ext-item empty">none</div>'
+      : pref.preferred.map(ext =>
+          `<div class="aud-ext-item">${ext.map(argInline).join('<span class="aud-sep">·</span>')}</div>`
+        ).join('');
+    return `<div class="aud-card">
+      <div class="aud-card-hdr">
+        <div class="aud-name">${taud(pref.audience)}</div>
+        <div class="aud-order">${orderHtml}</div>
+      </div>
+      <div class="aud-body">
+        <p class="aud-sub">${gndLbl}</p>
+        <div class="aud-ext-list">${gndHtml}</div>
+        <p class="aud-sub" style="margin-top:0.9em">${prefLbl} (${pref.preferred.length})</p>
+        <div class="aud-ext-list">${prefHtml}</div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('vaf-body').innerHTML = `<div class="grid-2">${cards}</div>`;
+}
+
+/* ── Dialectical Proofs ──────────────────────────────────── */
+function renderProofs() {
+  const data = DATA.proofs;
+  document.getElementById('proofs-count').textContent = `${data.length} accepted`;
+
+  const proLabel = MODE === 'english' ? 'PRO' : 'PRO';
+  const oppLabel = MODE === 'english' ? 'OPP' : 'OPP';
+
+  const cards = data.map((a, idx) => {
+    const label = `<span class="acts">${acts(a)}</span>${arrow(a.scheme)}${chip(a.value)}`;
+    const steps = (a.proof || []).map((step, i) => {
+      const player = step.player === 'pro' ? proLabel : oppLabel;
+      const cls    = step.player;
+      const moveActs = Array.isArray(step.actions) ? step.actions.map(ta).join(', ') : '';
+      return `<div class="proof-step">
+        <span class="proof-step-n">${i+1}.</span>
+        <span class="proof-player ${cls}">${player}</span>
+        <span class="acts">${moveActs}</span>
+        ${arrow(step.scheme)}${chip(step.value)}
+      </div>`;
+    }).join('');
+
+    const stepCount = (a.proof || []).length;
+    const selfDef   = stepCount === 1;
+    const badge     = selfDef
+      ? '<span style="font-size:0.65em;color:var(--lifeH-fg);font-family:JetBrains Mono,monospace;margin-left:0.6em;">self-defending</span>'
+      : '';
+
+    return `<div class="proof-card">
+      <details>
+        <summary class="proof-summary">
+          ${label}${badge}
+          <span style="font-size:0.68em;color:var(--text-dim);font-family:JetBrains Mono,monospace;white-space:nowrap;">
+            ${stepCount} move${stepCount !== 1 ? 's' : ''}
+          </span>
+          <span class="proof-toggle"></span>
+        </summary>
+        <div class="proof-body">${steps || '<span class="empty">no moves</span>'}</div>
+      </details>
+    </div>`;
+  }).join('');
+
+  document.getElementById('proofs-body').innerHTML =
+    `<div class="proof-section">${cards}</div>`;
+}
+
+/* ── Mode switch ─────────────────────────────────────────── */
+document.getElementById('mode-switch').addEventListener('click', e => {
+  const btn = e.target.closest('.mode-opt');
+  if (!btn || btn.dataset.mode === MODE) return;
+  MODE = btn.dataset.mode;
+  document.querySelectorAll('.mode-opt').forEach(o =>
+    o.classList.toggle('active', o.dataset.mode === MODE)
+  );
+  applyLabels();
+  if (DATA.args)       renderArgs();
+  if (DATA.attacks)    renderAttacks();
+  if (DATA.extensions) renderExtensions();
+  if (DATA.vaf)        renderVAF();
+  if (DATA.proofs)     renderProofs();
+});
+
+/* ── Page tabs ───────────────────────────────────────────── */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.page).classList.add('active');
+    document.querySelector('.shell-content').scrollTop = 0;
+    // lazy-load heavy tabs on first visit
+    const pg = tab.dataset.page;
+    if (pg === 'pg-extensions' && !DATA.extensions) loadExtensions();
+    if (pg === 'pg-proofs'     && !DATA.proofs)     loadProofs();
+  });
+});
+
+/* ── Inner tabs (delegated) ──────────────────────────────── */
+document.addEventListener('click', e => {
+  const tab = e.target.closest('.inner-tab');
+  if (!tab) return;
+  const container = tab.closest('.page');
+  container.querySelectorAll('.inner-tab').forEach(t => t.classList.remove('active'));
+  container.querySelectorAll('.inner-panel').forEach(p => p.classList.remove('active'));
+  tab.classList.add('active');
+  document.getElementById(tab.dataset.panel).classList.add('active');
+});
+
+/* ── Fetch ───────────────────────────────────────────────── */
+// Fast endpoints — load immediately on page start
+get('/args').then(d => { DATA.args = d; renderArgs(); })
+  .catch(e => showErr('args-body', e.message));
+
+get('/attacks').then(d => { DATA.attacks = d; renderAttacks(); })
+  .catch(e => showErr('attacks-body', e.message));
+
+get('/vaf').then(audiences =>
+  Promise.all(audiences.map(a =>
+    Promise.all([get(`/vaf/${a.audience}`), get(`/vaf/${a.audience}/grounded`)])
+  ))
+).then(d => { DATA.vaf = d; renderVAF(); })
+  .catch(e => showErr('vaf-body', e.message));
+
+// Heavy endpoints — loaded lazily on first tab visit
+function loadExtensions() {
+  get('/extensions').then(d => { DATA.extensions = d; renderExtensions(); })
+    .catch(e => showErr('extensions-body', e.message));
+}
+
+function loadProofs() {
+  get('/credulous').then(d => { DATA.proofs = d; renderProofs(); })
+    .catch(e => showErr('proofs-body', e.message));
+}
+</script>
+</body>
+</html>

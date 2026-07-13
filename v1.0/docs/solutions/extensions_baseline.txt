@@ -1,0 +1,142 @@
+
+--- Valid states ---
+state: [1,1,1,1,1,1]
+state: [1,1,1,1,1,0]
+state: [1,1,1,1,0,1]
+state: [1,1,1,1,0,0]
+state: [1,1,1,0,1,1]
+state: [1,1,1,0,1,0]
+state: [1,1,1,0,0,1]
+state: [1,1,1,0,0,0]
+state: [1,1,0,1,1,1]
+state: [1,1,0,1,1,0]
+state: [1,1,0,1,0,1]
+state: [1,1,0,1,0,0]
+state: [1,1,0,0,1,1]
+state: [1,1,0,0,1,0]
+state: [1,1,0,0,0,1]
+state: [1,1,0,0,0,0]
+state: [1,0,1,1,1,1]
+state: [1,0,1,1,1,0]
+state: [1,0,1,1,0,1]
+state: [1,0,1,1,0,0]
+state: [1,0,1,0,1,1]
+state: [1,0,1,0,1,0]
+state: [1,0,1,0,0,1]
+state: [1,0,1,0,0,0]
+state: [1,0,0,1,1,1]
+state: [1,0,0,1,1,0]
+state: [1,0,0,1,0,1]
+state: [1,0,0,1,0,0]
+state: [1,0,0,0,1,1]
+state: [1,0,0,0,1,0]
+state: [1,0,0,0,0,1]
+state: [1,0,0,0,0,0]
+state: [0,1,1,1,1,1]
+state: [0,1,1,1,1,0]
+state: [0,1,1,1,0,1]
+state: [0,1,1,1,0,0]
+state: [0,1,1,0,1,1]
+state: [0,1,1,0,1,0]
+state: [0,1,1,0,0,1]
+state: [0,1,1,0,0,0]
+state: [0,1,0,1,1,1]
+state: [0,1,0,1,1,0]
+state: [0,1,0,1,0,1]
+state: [0,1,0,1,0,0]
+state: [0,1,0,0,1,1]
+state: [0,1,0,0,1,0]
+state: [0,1,0,0,0,1]
+state: [0,1,0,0,0,0]
+state: [0,0,1,1,1,1]
+state: [0,0,1,1,1,0]
+state: [0,0,1,1,0,1]
+state: [0,0,1,1,0,0]
+state: [0,0,1,0,1,1]
+state: [0,0,1,0,1,0]
+state: [0,0,1,0,0,1]
+state: [0,0,1,0,0,0]
+state: [0,0,0,1,1,1]
+state: [0,0,0,1,1,0]
+state: [0,0,0,1,0,1]
+state: [0,0,0,1,0,0]
+state: [0,0,0,0,1,1]
+state: [0,0,0,0,1,0]
+state: [0,0,0,0,0,1]
+state: [0,0,0,0,0,0]
+
+--- Initial states ---
+initial: [0,1,1,1,1,1]
+initial: [0,1,1,1,0,1]
+initial: [0,0,1,1,1,1]
+initial: [0,0,1,1,0,1]
+
+--- 1-step transitions from initial states ---
+[0,1,1,1,1,1] --[buyH]--> [1,0,1,1,1,1]
+[0,1,1,1,1,1] --[takH]--> [1,1,1,0,1,1]
+[0,1,1,1,1,1] --[doNH]--> [0,1,0,1,1,1]
+[0,1,1,1,0,1] --[buyH]--> [1,0,1,1,0,1]
+[0,1,1,1,0,1] --[takH]--> [1,1,1,0,0,1]
+[0,1,1,1,0,1] --[doNH]--> [0,1,0,1,0,1]
+[0,0,1,1,1,1] --[takH]--> [1,0,1,0,1,1]
+[0,0,1,1,1,1] --[doNH]--> [0,0,0,1,1,1]
+[0,0,1,1,0,1] --[takH]--> [1,0,1,0,0,1]
+[0,0,1,1,0,1] --[doNH]--> [0,0,0,1,0,1]
+
+--- 2-step transitions ---
+[0,1,1,1,1,1] --[buyH,losH]--> [0,0,1,1,1,1]
+[0,1,1,1,1,1] --[buyH,doNH]--> [1,0,1,1,1,1]
+[0,1,1,1,1,1] --[takH,comH]--> [1,0,1,1,1,1]
+[0,1,1,1,1,1] --[takH,losH]--> [0,1,1,0,1,1]
+[0,1,1,1,1,1] --[takH,doNH]--> [1,1,1,0,1,1]
+[0,1,1,1,1,1] --[doNH,doNH]--> [0,1,0,1,1,1]
+[0,1,1,1,0,1] --[buyH,losH]--> [0,0,1,1,0,1]
+[0,1,1,1,0,1] --[buyH,doNH]--> [1,0,1,1,0,1]
+[0,1,1,1,0,1] --[takH,comH]--> [1,0,1,1,0,1]
+[0,1,1,1,0,1] --[takH,losH]--> [0,1,1,0,0,1]
+[0,1,1,1,0,1] --[takH,doNH]--> [1,1,1,0,0,1]
+[0,1,1,1,0,1] --[doNH,doNH]--> [0,1,0,1,0,1]
+[0,0,1,1,1,1] --[takH,losH]--> [0,0,1,0,1,1]
+[0,0,1,1,1,1] --[takH,doNH]--> [1,0,1,0,1,1]
+[0,0,1,1,1,1] --[doNH,doNH]--> [0,0,0,1,1,1]
+[0,0,1,1,0,1] --[takH,losH]--> [0,0,1,0,0,1]
+[0,0,1,1,0,1] --[takH,doNH]--> [1,0,1,0,0,1]
+[0,0,1,1,0,1] --[doNH,doNH]--> [0,0,0,1,0,1]
+
+--- Value evaluations (hal) ---
+[0,1,1,1,1,1] -> [1,0,1,1,1,1] : [+lifeH,-freedomH]
+[0,1,1,1,1,1] -> [1,1,1,0,1,1] : [+lifeH,-lifeC]
+[0,1,1,1,1,1] -> [0,1,0,1,1,1] : [-lifeH]
+[0,1,1,1,0,1] -> [1,0,1,1,0,1] : [+lifeH,-freedomH]
+[0,1,1,1,0,1] -> [1,1,1,0,0,1] : [+lifeH,-lifeC]
+[0,1,1,1,0,1] -> [0,1,0,1,0,1] : [-lifeH]
+[0,0,1,1,1,1] -> [1,0,1,0,1,1] : [+lifeH,-lifeC]
+[0,0,1,1,1,1] -> [0,0,0,1,1,1] : [-lifeH]
+[0,0,1,1,0,1] -> [1,0,1,0,0,1] : [+lifeH,-lifeC]
+[0,0,1,1,0,1] -> [0,0,0,1,0,1] : [-lifeH]
+
+--- Arguments ---
+arg([buyH,doNH], lifeH)
+arg([takH,comH], lifeH)
+arg([takH,doNH], lifeH)
+
+--- Attacks ---
+arg([buyH,doNH],lifeH) attacks arg([takH,comH],lifeH)
+arg([buyH,doNH],lifeH) attacks arg([takH,doNH],lifeH)
+arg([takH,comH],lifeH) attacks arg([buyH,doNH],lifeH)
+arg([takH,comH],lifeH) attacks arg([takH,doNH],lifeH)
+arg([takH,doNH],lifeH) attacks arg([buyH,doNH],lifeH)
+arg([takH,doNH],lifeH) attacks arg([takH,comH],lifeH)
+
+--- Grounded extension ---
+grounded: []
+
+--- Preferred extensions ---
+preferred: [arg([takH,doNH],lifeH)]
+preferred: [arg([takH,comH],lifeH)]
+preferred: [arg([buyH,doNH],lifeH)]
+
+--- Stable extensions ---
+stable: [arg([takH,doNH],lifeH)]
+stable: [arg([takH,comH],lifeH)]
+stable: [arg([buyH,doNH],lifeH)]
