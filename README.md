@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/icon-mark-transparent.svg" alt="INS-framework logo" width="120" height="120">
+  <img src="assets/readme-banner-1200x300.png" alt="INS-framework — Moral reasoning in Prolog: action theory &amp; value-based argumentation" width="100%">
 </p>
 
 # INS — Moral Reasoning in Prolog
