@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/icon-mark-transparent.svg" alt="INS-framework logo" width="120" height="120">
+</p>
+
 # INS — Moral Reasoning in Prolog
 
 > *Can the structure of practical moral reasoning be made formally precise?*
