@@ -155,6 +155,41 @@ See `docs/notes/possible_worlds_semantics.md` for the full theoretical discussio
 including the grounding of AS3 within Lewis semantics, a canonical Lewis/Stalnaker
 divergence example, and the opening toward quantum logic in a second paper.
 
+### Normative Completion and Closure
+
+Applying the model-parametric theory of *grounded normative completion*
+(Perrone 2026, unpublished), each version of INS can be checked for two
+verification properties:
+
+- **Ground-soundness** — every content the system endorses is grounded in the
+  model: `X_K(c) ⊆ N(c)`.
+- **Ground-closure** — the *`Cn` test*: the contents obtained by applying the
+  environment's closure operation stay grounded, `Cn(c, X_K(c)) ⊆ N(c)`.  This is
+  what it means to be **closed under normative inference**.
+
+Because INS builds arguments by `setof` over *exactly* the grounding clauses
+(AS1 = `better`, AS2 = avoid-a-worse-alternative, AS3 = counterfactual
+`¬worse ∧ intervention-worse`), it is **ground-sound by construction**.  Closure
+is then checked under three readings of the operator `Cn`:
+
+| Version | Identity `Cn` | Scheme-calculus `Cn` | Argumentation acceptance (Dung/VAF) |
+|---------|:-------------:|:--------------------:|:-----------------------------------:|
+| **Non-counterfactual** (AS1/AS2) | ✓ | ✓ | ✓ |
+| **Complete** (+AS3) | ✓ | ✓ *iff* `CFTrans` materialised | ✓ |
+
+- **Non-counterfactual INS** is ground-closed by *expressive restriction*: it
+  cannot state difference-making contents, so it cannot endorse ungrounded ones —
+  at the cost of a coverage gap for responsibility/protection claims, and an
+  unsoundness risk if an AS2 output ("avoids a worse *available* alternative") is
+  over-read as an AS3 counterfactual-protection claim.
+- **Complete INS** is ground-closed *including* AS3, conditional on counterfactual
+  adequacy (`CFTrans`, which the implementation materialises); keeping AS3 modular
+  from the VAF closure is exactly what prevents closure leakage.
+
+Full analysis: `docs/notes/normative_completion_and_closure.md` and the
+[Normative Completion and Closure](https://github.com/FrancescoPerrone/ins-framework/wiki/Normative-Completion-and-Closure)
+wiki page.
+
 ---
 
 ## Prerequisites
