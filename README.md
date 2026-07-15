@@ -20,7 +20,7 @@
 This project is a SWI-Prolog implementation of a moral reasoning system grounded in
 the practical argumentation framework of Atkinson & Bench-Capon (2006) and the
 Value-Based Argumentation Framework (VAF) of Bench-Capon (2003).  It grew out of
-work originally started in 2013 in collaboration with
+work originally begun in 2013 under the supervision of
 [Marek Sergot](http://www.doc.ic.ac.uk/~mjs/) (Imperial College London), whose work
 on normative systems, deontic logic, and action formalisms underpins the formal
 structure used here.
@@ -459,6 +459,9 @@ Halpern, J. Y., & Pearl, J. (2005). Causes and explanations: A structural-model
 approach. *The British Journal for the Philosophy of Science*, 56(4), 843–887.
 
 Lewis, D. (1973). *Counterfactuals*. Harvard University Press.
+
+Perrone, F. (2026). *Ground-Sound Normative Completion: A Model-Parametric Operator
+for Normative Closure with Many-Dimensional Sensitivity*. Unpublished manuscript.
 
 Stalnaker, R. (1968). A theory of conditionals. In N. Rescher (Ed.),
 *Studies in Logical Theory* (pp. 98–112). Blackwell.
