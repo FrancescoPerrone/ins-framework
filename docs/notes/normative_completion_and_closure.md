@@ -239,6 +239,36 @@ the paper identifies as mandatory for difference-making contents.
 
 ## 6. Discussion
 
+**Closure failure as a distant possible world.** When ground-closure fails —
+$\mathrm{Cn}(c, X_\mathcal{K}(c)) \not\subseteq \mathsf{N}_\mathfrak{G}(c)$ — the
+offending content is not thereby false or incoherent. It is a well-typed content
+the closure operator can actually reach; in the paper's terms, "unsupported is not
+false" (Caution 4.11). It is a *possible but not easily accessible* state:
+reachable in principle by normative inference, yet lying outside the grounded core
+— modally accessible, but "distant" from the realised situation.
+
+There is a precise hook for this. The paper's $\mathrm{Cn}$ is an order-theoretic
+(Kuratowski-style) closure operator — extensive, monotone, idempotent — the same
+algebra as an S4-style ◇ ("possibly derivable"). Read that way, "closed under
+normative inference" says that the grounded domain $\mathsf{N}(c)$ is a *closed
+set* under $\mathrm{Cn}$, and internal ground-closure $\mathsf{IC}(\mathfrak{G})$
+is literally the statement that the grounded domain is topologically/modally
+closed. Closure failure is then a *leaky boundary*: a $\mathrm{Cn}$-accessible
+(possibly-derivable) content just outside the grounded core — in Lewis terms, an
+outer sphere, accessible but not among the closest, actualised worlds. This ties
+directly to INS's own `possible_worlds.pl`, where the same closeness ordering that
+grades counterfactual worlds grades how "far" an ungrounded-but-reachable content
+is:
+
+> When a framework fails to be closed under normative inference, the offending
+> content is not thereby false or impossible. It is a genuinely possible content
+> that the closure operator can reach, but which lies outside the grounded domain
+> — modally, a state of affairs accessible in principle yet "distant" from the
+> realised situation, in the same closeness sense the possible-world layer uses to
+> grade counterfactual alternatives. Ground-closure is precisely the condition
+> that normative inference never carries the system out of the grounded core into
+> such a distant, unsupported world.
+
 **Doing versus allowing.** The forward schemes evaluate histories that may
 *contain* inaction, but they cannot distinguish an agent's *causing* an outcome
 from its merely *allowing* the outcome to occur (Perrone 2026, §12). AS3 adds the
@@ -265,9 +295,55 @@ reflects a structural limit of the action model, not a defect of the
 argumentation layer. In the paper's terms, the environment is simply not adequate
 for that content, and "unsupported is not false" (Caution 4.11).
 
+**Normative completeness in plain terms.** The coverage condition of §1 has a
+simple reading: *the system is never silent when the model does support a right
+thing to say.* It is a coverage guarantee, not a correctness or exhaustiveness
+one. It helps to separate three notions a reader easily conflates:
+
+- **Soundness** — everything the system says is grounded (no unsupported claims).
+- **Completeness** — it says *something* grounded whenever grounded guidance
+  exists (it does not go quiet).
+- **Correctness** — a separate, *model-relative* matter; neither property claims
+  moral truth.
+
+These come apart: a system can be sound-but-silent (says nothing, so trivially
+sound but useless), or cover-everything-but-reckless (always grounded, plus
+ungrounded extras). Concretely, normative completeness is what one wants of a
+clinical-triage aid that surfaces a supported action when the protocol grounds one
+(rather than punting to "cannot advise"), a content-policy assistant that issues a
+verdict when policy clearly grounds one (rather than escalating every hard case),
+or a legal-reasoning tool that states the permission or obligation the statute and
+facts ground. In INS itself, whenever the model grounds an AS1/AS2 argument for a
+value in a state, the system constructs it (`setof`) — so INS is normatively
+complete for its scheme fragment.
+
+> In practical terms, normative completeness is a coverage guarantee: the system
+> will not stay silent when its model actually supports a recommendation — much as
+> a clinical decision aid should surface a supported action when the protocol
+> grounds one, rather than deferring. It is distinct from soundness (saying only
+> supported things) and from correctness (which remains relative to the chosen
+> model).
+
 ---
 
 ## 7. What the results mean beyond INS
+
+**The headline: misalignment as an emergent property of closure.** The single most
+transferable finding is that *local groundedness does not entail global
+groundedness*. Every content a system endorses can be individually grounded while
+the **closure** of those contents — what its own normative inference elaborates,
+or acts on — reaches an ungrounded content. When that happens, misalignment is an
+**emergent property of the closure operator**: invisible at the level of any
+single output, and visible only once the system infers or acts. In the modal
+reading of §6, the system's own inference carries it into a *possible-but-
+ungrounded* world — accessible in principle, yet distant from the actual,
+supported situation — and it proceeds as if that distant world were actual. This
+is the shape of agentic misalignment (Lynch et al. 2025): not a single bad output,
+but a **leaky normative boundary**. INS is a minimal, decidable witness that the
+boundary *can* be kept tight — ground-closed by construction, with the
+counterfactual layer held modular — and its natural failure mode (integrating AS3
+into the acceptance closure without counterfactual adequacy) is precisely how the
+emergence would arise. The four lessons below unpack this.
 
 INS is a deliberately situated model: two agents, six binary attributes, a single
 insulin dilemma. Its closure verdicts are model-relative and carry no moral
@@ -328,7 +404,53 @@ terminating.
 
 ---
 
-## 8. Model-relativity caution
+## 8. Future work
+
+The analysis opens three directions, in increasing order of speculation. Work on
+the third has already begun; it is sketched here to fix the trajectory, not to
+claim the result.
+
+**(i) Integrating the counterfactual layer into the acceptance closure (formal).**
+INS currently holds AS3 outside `arg/2`, which is exactly what keeps the
+argumentation-acceptance reading closed. The open problem is to characterise
+*precisely* when integrating AS3 into the Dung/VAF closure preserves ground-closure
+and when it breaks it — i.e. to turn the adequacy condition (materialised
+`CFTrans` for every AS3 content the extension can reach) from an implementation
+choice into a theorem. This is the formal core of the emergent-misalignment
+reading: it locates the exact boundary at which a locally sound system becomes
+globally unsound under its own inference.
+
+**(ii) A difference-making bridge to operator dynamics (defensible).** The
+counterfactual grounding clause of AS3 — *does replacing the agent's contribution
+with inaction change the value's realisation?* — has the same form as an
+out-of-time-order commutator $C(t)=\langle\,|[W(t),V(0)]|^2\,\rangle$ in quantum
+many-body physics, which measures whether an early local perturbation $V$ changes
+a later observable $W(t)$. Both are operationalisations of causal difference-making,
+and both induce a *graded, emergent reachability structure from the actual state*:
+the OTOC's butterfly light-cone plays the role that Lewis's spheres of closeness
+play around the realised world. Making this correspondence precise — commutator ↔
+counterfactual dependence, butterfly velocity ↔ the rate at which normative
+inference can reach ungrounded contents — is a concrete next step.
+
+**(iii) A quantum-dynamical reading of normative closure (conjectural; underway).**
+More speculatively, iterating $\mathrm{Cn}$ "spreads" endorsed contents across
+content-space much as operator growth spreads a local perturbation, suggesting a
+*scrambling* picture of emergent misalignment with a characteristic "butterfly
+velocity of normative inference"; the audience parameter plays the role of the
+reference state against which correlations are taken, so emergent misalignment is
+audience-relative, as grounding already is; and if $\mathrm{Cn}$ factors into
+scheme- or audience-specific operators that do not commute — closing under one norm
+then another differing from the reverse order — the resulting non-Boolean lattice
+of normative contents is quantum-logical in structure, connecting to the opening
+toward quantum logic already flagged in the possible-world layer. This strand is a
+research programme, not a result: unitary dynamics, a Hilbert space, and a
+reference state are substantial structure to justify over a finite action model,
+and every claim in it is offered as conjecture. It is recorded because work on it
+has already started and because it fixes the direction of a second paper.
+
+---
+
+## 9. Model-relativity caution
 
 Every verdict above is conditional on the grounding environment INS fixes — its
 state space, transition function, value realisation, intervention semantics, and
@@ -367,10 +489,16 @@ approach. Part I: Causes. *The British Journal for the Philosophy of Science*,
 
 Horty, J. F. (2001). *Agency and Deontic Logic.* Oxford University Press.
 
+Larkin, A. I., & Ovchinnikov, Y. N. (1969). Quasiclassical method in the theory of
+superconductivity. *Soviet Physics JETP*, 28(6), 1200–1205.
+
 Lewis, D. (1973). *Counterfactuals.* Harvard University Press.
 
 Lynch, A., et al. (2025). Agentic misalignment: how LLMs could be insider
 threats. *arXiv:2510.05179*.
+
+Maldacena, J., Shenker, S. H., & Stanford, D. (2016). A bound on chaos. *Journal
+of High Energy Physics*, 2016(8), 106.
 
 Stalnaker, R. (1968). A theory of conditionals. In N. Rescher (Ed.), *Studies in
 Logical Theory* (pp. 98–112). Blackwell.

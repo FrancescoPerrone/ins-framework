@@ -186,6 +186,22 @@ is then checked under three readings of the operator `Cn`:
   adequacy (`CFTrans`, which the implementation materialises); keeping AS3 modular
   from the VAF closure is exactly what prevents closure leakage.
 
+**Key finding — misalignment as an emergent property of closure.** *Local
+groundedness does not entail global groundedness*: each endorsed content can be
+grounded while the *closure* of those contents — what a system's own inference
+elaborates or acts on — reaches an ungrounded one.  So misalignment can **emerge
+from normative inference itself**, invisible in any single output (Lynch et al.
+2025).  INS is a minimal, decidable witness that the closure boundary can be kept
+tight.
+
+**Future work** (see the wiki [Future work](https://github.com/FrancescoPerrone/ins-framework/wiki/Normative-Completion-and-Closure#future-work)):
+(i) integrating AS3 into the Dung/VAF closure as a theorem on when ground-closure
+survives; (ii) a difference-making bridge between AS3's counterfactual clause and
+the **out-of-time-order correlator (OTOC)** of quantum many-body physics; and
+(iii) a conjectural, already-underway quantum-dynamical reading of normative
+closure (scrambling, audience-as-reference-state, non-commuting normative operators
+→ quantum logic).
+
 Full analysis: `docs/notes/normative_completion_and_closure.md` and the
 [Normative Completion and Closure](https://github.com/FrancescoPerrone/ins-framework/wiki/Normative-Completion-and-Closure)
 wiki page.
@@ -459,6 +475,12 @@ Halpern, J. Y., & Pearl, J. (2005). Causes and explanations: A structural-model
 approach. *The British Journal for the Philosophy of Science*, 56(4), 843–887.
 
 Lewis, D. (1973). *Counterfactuals*. Harvard University Press.
+
+Lynch, A., et al. (2025). Agentic misalignment: how LLMs could be insider threats.
+*arXiv:2510.05179*.
+
+Maldacena, J., Shenker, S. H., & Stanford, D. (2016). A bound on chaos. *Journal of
+High Energy Physics*, 2016(8), 106.
 
 Perrone, F. (2026). *Ground-Sound Normative Completion: A Model-Parametric Operator
 for Normative Closure with Many-Dimensional Sensitivity*. Unpublished manuscript.
