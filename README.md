@@ -10,6 +10,7 @@
 > *Can the structure of practical moral reasoning be made formally precise?*
 > *What can an action-theoretic system tell us — and where does it reach its boundary?*
 > *What does counterfactual causation add to what value-based argumentation leaves out?*
+> *And when a reasoner infers onward from what it accepts, does it stay grounded — or does misalignment emerge from inference itself?*
 
 ---
 
@@ -24,6 +25,18 @@ work originally begun in 2013 under the supervision of
 [Marek Sergot](http://www.doc.ic.ac.uk/~mjs/) (Imperial College London), whose work
 on normative systems, deontic logic, and action formalisms underpins the formal
 structure used here.
+
+**The core of the project.** INS asks not only whether a moral reasoner's individual
+conclusions are grounded, but whether they *stay* grounded under the reasoner's own
+inference — and its central finding is that they need not. **Misalignment can be an
+emergent property of closure**: every content a system endorses may be individually
+grounded while what that system infers, elaborates, or acts upon drifts into an
+ungrounded — modally "distant" — possible world, invisible in any single output.
+INS is a small, fully decidable *witness* that this normative boundary can be kept
+tight, and a laboratory for the conditions under which it fails. Grounded normative
+**closure**, and the (physics-inspired) study of how it breaks, is the core of this
+work and the direction of ongoing research — see
+[Normative Completion and Closure](https://github.com/FrancescoPerrone/ins-framework/wiki/Normative-Completion-and-Closure).
 
 The system has since been completed and extended with full
 Dung (1995) argumentation semantics, a VAF layer with four named audiences, joint
